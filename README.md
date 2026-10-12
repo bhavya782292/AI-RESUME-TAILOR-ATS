@@ -1,148 +1,106 @@
-# 🚀 AI Resume Tailor & ATS Optimization Engine
+# AI Resume Tailor & ATS Optimization Engine
 
-An AI-powered resume optimization and ATS evaluation application built using **Python, Streamlit, Mistral AI, Scikit-learn, Pandas, Plotly, and PyPDF**.
+**Live App:** https://imydnjw8qsjfbvegiwzah7.streamlit.app/  
+**GitHub Repository:** https://github.com/bhavya782292/AI-RESUME-TAILOR-ATS
 
-The application analyzes a candidate's resume against a target Job Description (JD), calculates resume-JD similarity, identifies missing skills and keywords, and uses a two-stage LLM workflow to generate a tailored resume.
+An AI-powered Streamlit application that helps tailor a resume to a job description. It combines resume text extraction, keyword-based similarity analysis, Gemini-powered feedback, and a review-and-revision workflow to help users identify gaps and improve resume alignment.
 
-## 🔗 Links
+## Features
 
-- 🌐 **Live Demo:** [Try the AI Resume Tailor](https://imydnjw8qsjfbvegiwzah7.streamlit.app/)
-- 💻 **GitHub Repository:** [View Source Code](https://github.com/bhavya782292/AI-RESUME-TAILOR-ATS)
+- **Resume upload and text extraction:** Upload a resume PDF and extract its text for analysis.
+- **Job-description matching:** Compare resume content with a job description using TF-IDF and cosine similarity.
+- **Gemini-powered analysis:** Generate ATS-oriented feedback and suggestions using the Gemini API.
+- **Resume tailoring:** Produce an improved, job-description-aligned version while avoiding unsupported claims.
+- **Quality review:** Review the generated resume for issues and use feedback in a limited revision step.
+- **Streamlit interface:** Use the app through the live web interface.
 
----
+> Results are estimates and suggestions, not a guarantee of passing an ATS or getting an interview. Always review generated content for accuracy before using it.
 
-## 🎯 Project Overview
+## Tech Stack
 
-Many resumes fail to perform well in ATS screening because they do not sufficiently match the skills, keywords, and requirements mentioned in a job description.
+- Python
+- Streamlit
+- Google Gemini API (`google-genai`)
+- PyPDF
+- scikit-learn (TF-IDF and cosine similarity)
+- pandas
+- Plotly
 
-This project provides an automated resume analysis and tailoring workflow that:
+## Run Locally
 
-- 📄 Extracts text from uploaded PDF resumes
-- 💼 Accepts a target Job Description
-- 🔍 Calculates resume-JD similarity using TF-IDF and Cosine Similarity
-- 🤖 Uses Mistral AI for resume evaluation
-- 🧩 Identifies missing skills and keywords
-- ✍️ Generates a tailored resume using an LLM
-- 📊 Displays ATS and similarity metrics
-- 📥 Provides downloadable tailored resume content
+### 1. Clone the repository
 
-The system combines **traditional NLP techniques with LLM-based analysis and generation**.
+```bash
+git clone https://github.com/bhavya782292/AI-RESUME-TAILOR-ATS.git
+cd AI-RESUME-TAILOR-ATS
+```
 
----
+### 2. Create and activate a virtual environment (recommended)
 
-## ✨ Key Features
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-### 📄 PDF Resume Parsing
+On Windows, activate it with:
 
-Users can upload their resume in PDF format.
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-The application uses **PyPDF** to extract text from the uploaded resume before performing further analysis.
+### 3. Install dependencies
 
-### 💼 Job Description Analysis
+```bash
+pip install -r requirements.txt
+```
 
-Users can paste the target Job Description into the application.
+### 4. Configure the Gemini API key
 
-The resume content is then analyzed against the requirements of the provided JD.
+Create `.streamlit/secrets.toml` locally:
 
-### 📊 TF-IDF + Cosine Similarity
+```toml
+GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+```
 
-The application uses Scikit-learn's:
+Alternatively, configure `GEMINI_API_KEY` in your deployment platform's secrets settings.
 
-- `TfidfVectorizer`
-- `cosine_similarity`
+**Security:** Never commit `.streamlit/secrets.toml`, API keys, or other credentials to GitHub. Keep secrets excluded through `.gitignore`. If a key is exposed, revoke it and generate a replacement.
 
-to calculate the textual similarity between the resume and the target job description.
+### 5. Start the app
 
-The resulting similarity score is displayed as a percentage.
+```bash
+streamlit run app.py
+```
 
-### 🤖 Mistral AI Resume Analysis
+## Deployment
 
-The application integrates **Mistral AI** to evaluate the resume against the target job description.
+The app is deployed on Streamlit Community Cloud:
 
-The first LLM stage analyzes the resume and identifies:
+**Open the live app:** https://imydnjw8qsjfbvegiwzah7.streamlit.app/
 
-- Resume-JD alignment
-- Missing skills
-- Relevant keywords
-- ATS-oriented score
+The deployed app uses the GitHub repository's configured branch and entry point. After pushing changes to the connected branch, Streamlit Cloud normally rebuilds the app automatically. Check the app's deployment logs if a build or runtime error occurs.
 
-### ✍️ AI Resume Tailoring
+## Limitations
 
-A second Mistral AI stage uses the analysis from the first stage to generate a tailored version of the resume.
+- ATS scores and similarity scores are approximate indicators, not official ATS results.
+- Output quality depends on the supplied resume, job description, model availability, and API limits.
+- Review all generated claims, dates, skills, and experience before submitting a resume.
+- Gemini API errors such as temporary `503 UNAVAILABLE` responses can occur; retry later if the service is temporarily unavailable.
 
-The workflow uses the identified missing skills and keywords to improve alignment with the target JD while maintaining the candidate's existing information.
-
-### 📈 Interactive Streamlit Dashboard
-
-The application provides an interactive interface displaying:
-
-- Mistral AI score
-- Scikit-learn similarity score
-- Missing skills
-- Evaluation visualization
-- Tailored resume output
-
-### 📥 Downloadable Output
-
-The generated tailored resume content can be downloaded directly from the application.
-
----
-
-## 🏗️ System Architecture
+## Project Structure
 
 ```text
-                         ┌──────────────────────┐
-                         │   Upload Resume PDF  │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │       PyPDF          │
-                         │   Text Extraction    │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │    Resume Text       │
-                         └──────────┬───────────┘
-                                    │
-                                    │
-                 ┌──────────────────┴──────────────────┐
-                 │                                     │
-                 ▼                                     ▼
-       ┌───────────────────┐               ┌─────────────────────┐
-       │ Target Job        │               │ TF-IDF Vectorizer   │
-       │ Description       │               │ + Cosine Similarity │
-       └─────────┬─────────┘               └──────────┬──────────┘
-                 │                                    │
-                 │                                    ▼
-                 │                           Resume-JD Similarity
-                 │
-                 ▼
-       ┌────────────────────────────┐
-       │ Mistral AI - Stage 1       │
-       │ Recruiter / Critic Analysis│
-       └────────────┬───────────────┘
-                    │
-                    ▼
-            ┌──────────────────┐
-            │ Missing Skills   │
-            │ Keywords + Score │
-            └────────┬─────────┘
-                     │
-                     ▼
-       ┌────────────────────────────┐
-       │ Mistral AI - Stage 2       │
-       │ Resume Writer              │
-       └────────────┬───────────────┘
-                    │
-                    ▼
-       ┌────────────────────────────┐
-       │   Tailored Resume Output   │
-       └────────────┬───────────────┘
-                    │
-                    ▼
-       ┌────────────────────────────┐
-       │    Streamlit Dashboard     │
-       │ Metrics + Visualization    │
-       └────────────────────────────┘
+AI-RESUME-TAILOR-ATS/
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .streamlit/
+    └── secrets.toml  # local only; do not commit
+```
+
+## Author
+
+**Bhavya Kukreja**
+
+- GitHub: https://github.com/bhavya782292
