@@ -4,3 +4,4 @@ pypdf
 scikit-learn
 pandas
 python-dotenv
+plotly
