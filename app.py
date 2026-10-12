@@ -46,7 +46,7 @@ if not gemini_api_key:
 
 # Use a stable Gemini Flash model. If this model is unavailable to
 # your account, replace it with a model listed in Google AI Studio.
-MODEL_NAME = "gemini-3.5-flash-lite"
+MODEL_NAME = "gemini-3.1-flash-lite"
 client = genai.Client(api_key=gemini_api_key)
 
 
